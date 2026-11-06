@@ -5,7 +5,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Readex+Pro:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: sticky header, deep-green hero with a live timetable card, then a catalog that filters across 12 sections. */
 :root{
   --bg:#F3F6F4; --fg:#12302E; --muted:#566B67; --surface:#FFFFFF; --line:#D8E1DC; --soft:#E5EFEA;
   --brand:#0E4B46; --on-brand:#F2F8F5; --brand-line:#2F6F68;
@@ -42,16 +41,12 @@ button,input,select{font:inherit;color:inherit}
 .sec-head h2{font-size:clamp(24px,3.4vw,36px);font-weight:600}
 .sec-head p{color:var(--muted);max-width:54ch}
 .num{font-variant-numeric:tabular-nums}
-
-/* buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:8px 20px;border-radius:8px;border:1px solid transparent;background:var(--accent);color:var(--on-accent);font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap}
 .btn:hover{filter:brightness(1.06)}
 .btn.ghost{background:transparent;color:inherit;border-color:var(--line)}
 .btn.ghost:hover{border-color:var(--link)}
 .btn.sm{min-height:38px;padding:4px 16px;font-size:15px}
 .btn.done{background:var(--soft);color:var(--link);border-color:var(--line)}
-
-/* header */
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;padding-block:10px}
 .logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--f-display);font-weight:700;font-size:21px}
@@ -60,8 +55,6 @@ button,input,select{font:inherit;color:inherit}
 .nav a{padding:6px 12px;border-radius:8px;text-decoration:none;color:var(--muted);white-space:nowrap;font-weight:500}
 .nav a:hover{background:var(--soft);color:var(--fg)}
 @media (max-width:760px){.nav{order:3;flex-basis:100%}}
-
-/* hero */
 .hero{background:var(--brand);color:var(--on-brand);padding-block:clamp(36px,6vw,72px)}
 .hero .wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(24px,4vw,56px);align-items:center}
 @media (max-width:860px){.hero .wrap{grid-template-columns:minmax(0,1fr)}}
@@ -74,7 +67,6 @@ button,input,select{font:inherit;color:inherit}
 .search input,.search select,.tools input,.tools select{height:46px;border:1px solid var(--line);border-radius:8px;background:var(--bg);padding-inline:12px;width:100%;min-width:0}
 .facts{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:22px;font-size:15px;opacity:.9}
 .facts b{font-family:var(--f-display);font-size:20px;font-weight:600}
-
 .sched{background:var(--surface);color:var(--fg);border-radius:14px;padding:20px 20px 8px}
 .sched header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:6px}
 .sched h2{font-size:18px;font-weight:600}
@@ -85,16 +77,12 @@ button,input,select{font:inherit;color:inherit}
 .row span.who{display:block;color:var(--muted);font-size:14px}
 .pill{font-size:12.5px;padding:2px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
 .pill.now{background:var(--live);color:var(--on-live);border-color:transparent;font-weight:600}
-
-/* sections tiles */
 .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:12px}
 .tile{text-align:start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:6px;cursor:pointer;min-width:0}
 .tile:hover{border-color:var(--link)}
 .tile h3{font-size:18px;font-weight:600}
 .tile .sub{color:var(--muted);font-size:14px;line-height:1.7}
 .tile .cnt{margin-top:auto;padding-top:10px;font-size:13.5px;color:var(--link);font-weight:600}
-
-/* catalog */
 .band{background:var(--soft)}
 .tools{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,.7fr);gap:10px;margin-bottom:14px}
 @media (max-width:560px){.tools{grid-template-columns:minmax(0,1fr)}}
@@ -116,28 +104,20 @@ button,input,select{font:inherit;color:inherit}
 .c-foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:12px;border-top:1px dashed var(--line)}
 .price{font-family:var(--f-display);font-size:19px;font-weight:600;font-variant-numeric:tabular-nums}
 .empty{padding:36px 16px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:10px}
-
-/* how it works */
 .steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:0 28px;counter-reset:s}
 .steps li{padding-block:18px;border-top:2px solid var(--fg)}
 .steps b{display:block;font-family:var(--f-display);font-size:34px;font-weight:600;color:var(--link);line-height:1.2;font-variant-numeric:tabular-nums}
 .steps h3{font-size:18px;font-weight:600;margin-block:6px}
 .steps p{color:var(--muted);font-size:15px}
-
-/* features */
 .feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:0 48px}
 .feats div{padding-block:18px;border-top:1px solid var(--line)}
 .feats h3{font-size:18px;font-weight:600}
 .feats p{color:var(--muted);margin-top:4px;font-size:15.5px}
-
-/* teachers */
 .team{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:16px}
 .person{display:flex;gap:14px;align-items:center;min-width:0}
 .person i{flex:none;display:grid;place-items:center;width:56px;height:56px;border-radius:50%;background:var(--brand);color:var(--on-brand);font-family:var(--f-display);font-style:normal;font-size:24px;font-weight:600}
 .person b{display:block;font-weight:600;line-height:1.5}
 .person span{display:block;color:var(--muted);font-size:14px;line-height:1.6}
-
-/* plans */
 .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px;align-items:stretch}
 .plan{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:12px;min-width:0}
 .plan.pick{border:2px solid var(--link)}
@@ -148,8 +128,6 @@ button,input,select{font:inherit;color:inherit}
 .plan ul{margin:0;padding:0;list-style:none;display:grid;gap:8px;color:var(--muted);font-size:15.5px}
 .plan li::before{content:"—";margin-inline-end:8px;color:var(--link)}
 .plan .btn{margin-top:auto}
-
-/* faq */
 .faq{max-width:780px}
 details{border-top:1px solid var(--line);padding-block:4px}
 details:last-child{border-bottom:1px solid var(--line)}
@@ -158,8 +136,6 @@ summary::-webkit-details-marker{display:none}
 summary::after{content:"+";font-size:22px;line-height:1;color:var(--link)}
 details[open] summary::after{content:"−"}
 details p{color:var(--muted);padding-bottom:16px;max-width:65ch}
-
-/* cta + footer */
 .cta{background:var(--brand);color:var(--on-brand)}
 .cta .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
 .cta h2{font-size:clamp(24px,3.6vw,38px);font-weight:600;max-width:20ch}
@@ -172,8 +148,6 @@ footer ul{list-style:none;margin:0;padding:0;display:grid;gap:4px;color:var(--mu
 footer a{text-decoration:none}footer a:hover{color:var(--link)}
 .note{grid-column:1/-1;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:13.5px}
 .mail{user-select:all;direction:ltr;unicode-bidi:embed}
-
-/* policy pages */
 .doc{max-width:780px}
 .doc .back{display:inline-block;margin-bottom:20px;color:var(--link);text-decoration:none;font-weight:500}
 .doc h1{font-size:clamp(28px,4.4vw,42px);font-weight:600}
@@ -353,9 +327,10 @@ footer a{text-decoration:none}footer a:hover{color:var(--link)}
     <div class="sec-head"><h2>تواصل معنا</h2><p>مقر المنصة في مدينة الإسكندرية، مصر.</p></div>
     <div class="feats">
       <div><h3>المقر</h3><p>الإسكندرية، جمهورية مصر العربية</p></div>
+      <div><h3>رقم الهاتف</h3><p dir="ltr" style="text-align:right">+20 109 286 8817</p></div>
       <div><h3>البريد الإلكتروني</h3><p><span class="mail">mohameda3bdo@gmail.com</span></p></div>
       <div><h3>ساعات الدعم</h3><p>من الأحد إلى الخميس، من 10 صباحًا إلى 8 مساءً بتوقيت القاهرة</p></div>
-      <div><h3>السياسات</h3><p><a href="#refund-policy" style="color:var(--link)">سياسة الاسترجاع والإلغاء</a><br><a href="#privacy-policy" style="color:var(--link)">سياسة الخصوصية</a></p></div>
+      <div><h3>السياسات</h3><p><a href="#terms" style="color:var(--link)">الشروط والأحكام</a><br><a href="#refund-policy" style="color:var(--link)">سياسة الاسترجاع والإلغاء</a><br><a href="#privacy-policy" style="color:var(--link)">سياسة الخصوصية</a></p></div>
     </div>
   </div>
 </section>
@@ -374,6 +349,28 @@ footer a{text-decoration:none}footer a:hover{color:var(--link)}
 <div id="docView" hidden>
 <section class="sec">
   <div class="wrap">
+
+    <article class="doc" id="docTerms" hidden>
+      <a class="back" href="#top">← العودة للرئيسية</a>
+      <h1>الشروط والأحكام</h1>
+      <p class="upd">آخر تحديث: 6 نوفمبر 2026</p>
+      <p>أهلاً بك في منصة إتقان. استخدامك للمنصة يعني موافقتك الكاملة على الشروط والأحكام التالية:</p>
+
+      <h2>1. المقدمة والحسابات</h2>
+      <p>يجب تقديم بيانات صحيحة عند التسجيل. أنت مسئول عن الحفاظ على سرية بيانات حسابك، ويمنع مشاركة الحساب مع أشخاص آخرين.</p>
+
+      <h2>2. الملكية الفكرية</h2>
+      <p>جميع محتويات المنصة من فيديوهات، ملخصات، شعارات، ونصوص هي ملك لمنصة إتقان ولا يحق نسخها أو إعادة نشرها دون إذن كتابي.</p>
+
+      <h2>3. الاشتراكات والدفع</h2>
+      <p>تتم عمليات الدفع عبر بوابات دفع مرخصة وآمنة. تلتزم بدفع الرسوم المقررة بحسب الباقة المتاحة.</p>
+
+      <h2>4. الاستخدام المقبول</h2>
+      <p>يمنع استخدام المنصة في أي غرض غير قانوني، أو محاولة اختراق النظام أو التشويش على المستخدمين الآخرين.</p>
+
+      <h2>5. التواصل والدعم</h2>
+      <p>للاستفسارات والشكاوى، يمكنك التواصل معنا عبر البريد الإلكتروني <span class="mail">mohameda3bdo@gmail.com</span> أو الهاتف <span dir="ltr">+20 109 286 8817</span>.</p>
+    </article>
 
     <article class="doc" id="docRefund" hidden>
       <a class="back" href="#top">← العودة للرئيسية</a>
@@ -396,7 +393,7 @@ footer a{text-decoration:none}footer a:hover{color:var(--link)}
       <h2>الدورات المجانية</h2>
       <p>لا تترتب عليها رسوم، وبالتالي لا يوجد استرداد.</p>
 
-      <h2>حالات لا يشملها الاسترداد</h2>
+      <h2>حالات لا يشملها الاسترجاع</h2>
       <ul>
         <li>انتهاء مدة الاسترجاع المذكورة أعلاه.</li>
         <li>مشاركة بيانات الحساب مع الغير.</li>
@@ -467,7 +464,7 @@ footer a{text-decoration:none}footer a:hover{color:var(--link)}
       <p style="color:var(--muted);margin-top:10px;max-width:38ch;font-size:15px">منصة تعليم أونلاين تجمع المراحل الدراسية والجامعة والمهارات والاختبارات المهنية.</p>
     </div>
     <div><h3>المنصة</h3><ul><li><a href="#sections">الأقسام</a></li><li><a href="#courses">الدورات</a></li><li><a href="#plans">الأسعار</a></li></ul></div>
-    <div><h3>تواصل وسياسات</h3><ul><li>الإسكندرية، مصر</li><li><span class="mail">mohameda3bdo@gmail.com</span></li><li><a href="#refund-policy">سياسة الاسترجاع والإلغاء</a></li><li><a href="#privacy-policy">سياسة الخصوصية</a></li></ul></div>
+    <div><h3>تواصل وسياسات</h3><ul><li>الإسكندرية، مصر</li><li>هاتف: <span dir="ltr">+20 109 286 8817</span></li><li><span class="mail">mohameda3bdo@gmail.com</span></li><li><a href="#terms">الشروط والأحكام</a></li><li><a href="#refund-policy">سياسة الاسترجاع والإلغاء</a></li><li><a href="#privacy-policy">سياسة الخصوصية</a></li></ul></div>
     <p class="note">© 2026 منصة إتقان، الإسكندرية، مصر. الدورات والأسعار وأسماء المدرّسين الظاهرة في هذه الصفحة بيانات تجريبية لعرض التصميم.</p>
   </div>
 </footer>
@@ -493,7 +490,6 @@ const CATS=[
  {id:'kids',n:'الأطفال',s:'قراءة · حساب ذهني · علوم مبسطة'},
  {id:'teach',n:'تدريب المعلمين',s:'طرق تدريس · اختبارات إلكترونية · إدارة الصف'}
 ];
-// cat, title, teacher, level, hours, lessons, price, live
 const RAW=[
  ['school','الرياضيات للصف الثالث الثانوي (المنهج المصري)','أ. محمود عبد الفتاح','متوسط',64,120,149,1],
  ['school','الفيزياء للصف الثاني الثانوي','أ. هبة سلامة','متوسط',48,90,129,1],
@@ -607,7 +603,7 @@ $('startFree').addEventListener('click',()=>{
   enrolled.add(free.id);$('mineN').textContent=enrolled.size;renderAll();
   toast('تم تسجيلك في أول دورة مجانية: '+free.title);
 });
-const DOCS={'refund-policy':'docRefund','privacy-policy':'docPrivacy'};
+const DOCS={'terms':'docTerms','refund-policy':'docRefund','privacy-policy':'docPrivacy'};
 function route(){
   const h=decodeURIComponent(location.hash.slice(1));
   const isDoc=Object.prototype.hasOwnProperty.call(DOCS,h);
