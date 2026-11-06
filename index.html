@@ -1,0 +1,626 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>منصة إتقان</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Readex+Pro:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: sticky header, deep-green hero with a live timetable card, then a catalog that filters across 12 sections. */
+:root{
+  --bg:#F3F6F4; --fg:#12302E; --muted:#566B67; --surface:#FFFFFF; --line:#D8E1DC; --soft:#E5EFEA;
+  --brand:#0E4B46; --on-brand:#F2F8F5; --brand-line:#2F6F68;
+  --accent:#F5B800; --on-accent:#1C1400; --link:#0E4B46;
+  --live:#D6382B; --on-live:#FFFFFF;
+  --f-display:'Readex Pro','IBM Plex Sans Arabic',Tahoma,sans-serif;
+  --f-body:'IBM Plex Sans Arabic','Segoe UI',Tahoma,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1918; --fg:#E6EFEB; --muted:#98B0AA; --surface:#122625; --line:#234341; --soft:#173331;
+    --brand:#0A2F2C; --on-brand:#EAF4F0; --brand-line:#2E6560; --link:#7FD6C4;
+    --live:#FF6B5E; --on-live:#2A0805; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1918; --fg:#E6EFEB; --muted:#98B0AA; --surface:#122625; --line:#234341; --soft:#173331;
+  --brand:#0A2F2C; --on-brand:#EAF4F0; --brand-line:#2E6560; --link:#7FD6C4;
+  --live:#FF6B5E; --on-live:#2A0805; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.75}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+h1,h2,h3{font-family:var(--f-display);line-height:1.35;margin:0;text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.wrap{max-width:1120px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.sec{padding-block:clamp(44px,7vw,84px)}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:28px}
+.sec-head h2{font-size:clamp(24px,3.4vw,36px);font-weight:600}
+.sec-head p{color:var(--muted);max-width:54ch}
+.num{font-variant-numeric:tabular-nums}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:8px 20px;border-radius:8px;border:1px solid transparent;background:var(--accent);color:var(--on-accent);font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn:hover{filter:brightness(1.06)}
+.btn.ghost{background:transparent;color:inherit;border-color:var(--line)}
+.btn.ghost:hover{border-color:var(--link)}
+.btn.sm{min-height:38px;padding:4px 16px;font-size:15px}
+.btn.done{background:var(--soft);color:var(--link);border-color:var(--line)}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;padding-block:10px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--f-display);font-weight:700;font-size:21px}
+.logo i{display:grid;place-items:center;width:36px;height:36px;border-radius:9px;background:var(--accent);color:var(--on-accent);font-style:normal;font-size:20px}
+.nav{display:flex;gap:4px;overflow-x:auto;min-width:0}
+.nav a{padding:6px 12px;border-radius:8px;text-decoration:none;color:var(--muted);white-space:nowrap;font-weight:500}
+.nav a:hover{background:var(--soft);color:var(--fg)}
+@media (max-width:760px){.nav{order:3;flex-basis:100%}}
+
+/* hero */
+.hero{background:var(--brand);color:var(--on-brand);padding-block:clamp(36px,6vw,72px)}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(24px,4vw,56px);align-items:center}
+@media (max-width:860px){.hero .wrap{grid-template-columns:minmax(0,1fr)}}
+.eyebrow{font-size:14px;letter-spacing:.04em;opacity:.85;margin-bottom:14px}
+.hero h1{font-size:clamp(30px,5.2vw,54px);font-weight:600;line-height:1.3}
+.hl{background:linear-gradient(var(--accent),var(--accent)) no-repeat 0 95%/100% .17em;padding-bottom:.08em}
+.hero .lead{margin-top:16px;font-size:18px;max-width:50ch;opacity:.92}
+.search{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto;gap:8px;background:var(--surface);color:var(--fg);padding:8px;border-radius:12px;margin-top:26px}
+@media (max-width:640px){.search{grid-template-columns:minmax(0,1fr)}}
+.search input,.search select,.tools input,.tools select{height:46px;border:1px solid var(--line);border-radius:8px;background:var(--bg);padding-inline:12px;width:100%;min-width:0}
+.facts{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:22px;font-size:15px;opacity:.9}
+.facts b{font-family:var(--f-display);font-size:20px;font-weight:600}
+
+.sched{background:var(--surface);color:var(--fg);border-radius:14px;padding:20px 20px 8px}
+.sched header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:6px}
+.sched h2{font-size:18px;font-weight:600}
+.sched small{color:var(--muted)}
+.row{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:center;padding-block:12px;border-top:1px solid var(--line)}
+.row time{font-variant-numeric:tabular-nums;font-weight:600}
+.row b{display:block;font-weight:600;line-height:1.5}
+.row span.who{display:block;color:var(--muted);font-size:14px}
+.pill{font-size:12.5px;padding:2px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.pill.now{background:var(--live);color:var(--on-live);border-color:transparent;font-weight:600}
+
+/* sections tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:12px}
+.tile{text-align:start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:6px;cursor:pointer;min-width:0}
+.tile:hover{border-color:var(--link)}
+.tile h3{font-size:18px;font-weight:600}
+.tile .sub{color:var(--muted);font-size:14px;line-height:1.7}
+.tile .cnt{margin-top:auto;padding-top:10px;font-size:13.5px;color:var(--link);font-weight:600}
+
+/* catalog */
+.band{background:var(--soft)}
+.tools{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,.7fr);gap:10px;margin-bottom:14px}
+@media (max-width:560px){.tools{grid-template-columns:minmax(0,1fr)}}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 14px;min-height:36px;cursor:pointer;font-size:14.5px}
+.chip:hover{border-color:var(--link)}
+.chip[aria-pressed="true"]{background:var(--brand);color:var(--on-brand);border-color:var(--brand)}
+.count{color:var(--muted);font-size:14.5px;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:16px}
+.course{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.c-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.tag{font-size:12.5px;background:var(--soft);color:var(--link);padding:2px 10px;border-radius:999px}
+.live{font-size:12.5px;color:var(--live);display:inline-flex;gap:6px;align-items:center;font-weight:600}
+.live::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--live);animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.35}}
+.course h3{font-size:18px;font-weight:600;line-height:1.55}
+.teacher{color:var(--muted);font-size:14.5px}
+.meta{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+.c-foot{margin-top:auto;display:flex;justify-content:space-between;align-items:center;gap:12px;padding-top:12px;border-top:1px dashed var(--line)}
+.price{font-family:var(--f-display);font-size:19px;font-weight:600;font-variant-numeric:tabular-nums}
+.empty{padding:36px 16px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:10px}
+
+/* how it works */
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:0 28px;counter-reset:s}
+.steps li{padding-block:18px;border-top:2px solid var(--fg)}
+.steps b{display:block;font-family:var(--f-display);font-size:34px;font-weight:600;color:var(--link);line-height:1.2;font-variant-numeric:tabular-nums}
+.steps h3{font-size:18px;font-weight:600;margin-block:6px}
+.steps p{color:var(--muted);font-size:15px}
+
+/* features */
+.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:0 48px}
+.feats div{padding-block:18px;border-top:1px solid var(--line)}
+.feats h3{font-size:18px;font-weight:600}
+.feats p{color:var(--muted);margin-top:4px;font-size:15.5px}
+
+/* teachers */
+.team{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:16px}
+.person{display:flex;gap:14px;align-items:center;min-width:0}
+.person i{flex:none;display:grid;place-items:center;width:56px;height:56px;border-radius:50%;background:var(--brand);color:var(--on-brand);font-family:var(--f-display);font-style:normal;font-size:24px;font-weight:600}
+.person b{display:block;font-weight:600;line-height:1.5}
+.person span{display:block;color:var(--muted);font-size:14px;line-height:1.6}
+
+/* plans */
+.plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px;align-items:stretch}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.plan.pick{border:2px solid var(--link)}
+.plan h3{font-size:19px;font-weight:600;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.plan .tag{background:var(--accent);color:var(--on-accent);font-weight:600}
+.plan .big{font-family:var(--f-display);font-size:38px;font-weight:600;line-height:1.2;font-variant-numeric:tabular-nums}
+.plan .big small{font-size:15px;color:var(--muted);font-weight:400}
+.plan ul{margin:0;padding:0;list-style:none;display:grid;gap:8px;color:var(--muted);font-size:15.5px}
+.plan li::before{content:"—";margin-inline-end:8px;color:var(--link)}
+.plan .btn{margin-top:auto}
+
+/* faq */
+.faq{max-width:780px}
+details{border-top:1px solid var(--line);padding-block:4px}
+details:last-child{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;font-weight:600;padding-block:14px;list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:22px;line-height:1;color:var(--link)}
+details[open] summary::after{content:"−"}
+details p{color:var(--muted);padding-bottom:16px;max-width:65ch}
+
+/* cta + footer */
+.cta{background:var(--brand);color:var(--on-brand)}
+.cta .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.cta h2{font-size:clamp(24px,3.6vw,38px);font-weight:600;max-width:20ch}
+.cta p{opacity:.9;margin-top:8px;max-width:48ch}
+footer{background:var(--bg);border-top:1px solid var(--line);padding-block:40px}
+footer .wrap{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(2,minmax(0,1fr));gap:28px}
+@media (max-width:700px){footer .wrap{grid-template-columns:minmax(0,1fr)}}
+footer h3{font-size:15px;font-weight:600;margin-bottom:8px}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:4px;color:var(--muted);font-size:15px}
+footer a{text-decoration:none}footer a:hover{color:var(--link)}
+.note{grid-column:1/-1;border-top:1px solid var(--line);padding-top:16px;color:var(--muted);font-size:13.5px}
+.mail{user-select:all;direction:ltr;unicode-bidi:embed}
+
+/* policy pages */
+.doc{max-width:780px}
+.doc .back{display:inline-block;margin-bottom:20px;color:var(--link);text-decoration:none;font-weight:500}
+.doc h1{font-size:clamp(28px,4.4vw,42px);font-weight:600}
+.doc .upd{color:var(--muted);font-size:14.5px;margin-top:6px}
+.doc h2{font-size:20px;font-weight:600;margin-top:30px;margin-bottom:6px}
+.doc p,.doc li{line-height:1.95;max-width:65ch}
+.doc>p{margin-top:12px}
+.doc ul{margin:8px 0 0;padding-inline-start:22px;display:grid;gap:4px}
+.doc a,details a{color:var(--link)}
+.toast{position:fixed;inset-inline:0;bottom:0;display:flex;justify-content:center;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));pointer-events:none;z-index:40}
+.toast span{background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:10px;font-weight:500;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s}
+.toast.on span{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.live::before{animation:none}.toast span{transition:none}}
+</style>
+
+<div dir="rtl" lang="ar">
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#top"><i>إ</i><span>إتقان</span></a>
+    <nav class="nav" aria-label="التنقل الرئيسي">
+      <a href="#sections">الأقسام</a>
+      <a href="#courses">الدورات</a>
+      <a href="#how">كيف تعمل</a>
+      <a href="#plans">الأسعار</a>
+      <a href="#faq">الأسئلة</a>
+      <a href="#contact">تواصل</a>
+    </nav>
+    <a class="btn sm ghost" href="#courses" id="mine">دوراتي (<span class="num" id="mineN">0</span>)</a>
+  </div>
+</header>
+
+<main id="top">
+<div id="homeView">
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">من الإسكندرية، تعليم أونلاين لكل المراحل والتخصصات</p>
+      <h1>كل ما تريد أن <span class="hl">تتعلّمه</span>، في منصة واحدة</h1>
+      <p class="lead">من الصف الأول الابتدائي إلى اختبارات الرخص المهنية. حصص مباشرة مع مدرّسين مختصين، وتسجيلات تعود إليها في أي وقت.</p>
+      <form class="search" id="heroSearch" role="search">
+        <label class="sr" for="hq">ابحث عن دورة أو مدرّس</label>
+        <input id="hq" type="search" placeholder="ابحث عن دورة أو مدرّس">
+        <label class="sr" for="hc">القسم</label>
+        <select id="hc"></select>
+        <button class="btn" type="submit">ابحث</button>
+      </form>
+      <div class="facts">
+        <span><b class="num" id="fCourses">0</b> دورة</span>
+        <span><b class="num" id="fCats">0</b> قسمًا</span>
+        <span><b class="num" id="fLive">0</b> دورة بحصص مباشرة</span>
+      </div>
+    </div>
+    <aside class="sched" aria-label="جدول حصص اليوم">
+      <header><h2>حصص اليوم</h2><small>مثال على الجدول</small></header>
+      <div class="row"><time>3:30 م</time><div><b>الفيزياء، الثاني الثانوي</b><span class="who">أ. هبة سلامة</span></div><span class="pill now">مباشر الآن</span></div>
+      <div class="row"><time>5:00 م</time><div><b>الإنجليزية للمحادثة من الصفر</b><span class="who">أ. ريم الغامدي</span></div><span class="pill">قريبًا</span></div>
+      <div class="row"><time>6:30 م</time><div><b>التحصيلي العلمي</b><span class="who">أ. فهد العتيبي</span></div><span class="pill">قريبًا</span></div>
+      <div class="row"><time>8:00 م</time><div><b>التجويد للمبتدئين</b><span class="who">أ. عمر الشناوي</span></div><span class="pill">قريبًا</span></div>
+    </aside>
+  </div>
+</section>
+
+<section class="sec" id="sections">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>الأقسام</h2>
+      <p>اختر القسم لتصفية الدورات. كل قسم يضم مسارات من المبتدئ إلى المتقدم.</p>
+    </div>
+    <div class="tiles" id="tiles"></div>
+  </div>
+</section>
+
+<section class="sec band" id="courses">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>الدورات</h2>
+      <p>ابحث بالاسم أو المدرّس، أو صفِّ حسب القسم والمستوى.</p>
+    </div>
+    <div class="tools">
+      <label class="sr" for="q">بحث في الدورات</label>
+      <input id="q" type="search" placeholder="ابحث في الدورات">
+      <label class="sr" for="lvl">المستوى</label>
+      <select id="lvl">
+        <option value="all">كل المستويات</option>
+        <option>مبتدئ</option>
+        <option>متوسط</option>
+        <option>متقدم</option>
+      </select>
+    </div>
+    <div class="chips" id="chips" role="group" aria-label="تصفية حسب القسم"></div>
+    <p class="count num" id="count" aria-live="polite"></p>
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section class="sec" id="how">
+  <div class="wrap">
+    <div class="sec-head"><h2>كيف تبدأ</h2><p>أربع خطوات من التسجيل حتى الشهادة.</p></div>
+    <ol class="steps">
+      <li><b>1</b><h3>أنشئ حسابك</h3><p>اختر مرحلتك أو تخصصك، وأضف ولي الأمر إن كنت طالبًا في مرحلة مدرسية.</p></li>
+      <li><b>2</b><h3>حدّد مستواك</h3><p>اختبار قصير يقترح عليك الدورة المناسبة، فلا تبدأ من نقطة أسهل أو أصعب مما يلزم.</p></li>
+      <li><b>3</b><h3>تابع الدروس</h3><p>احضر الحصص المباشرة أو شاهد التسجيل لاحقًا، وحمّل الملخصات وأوراق العمل.</p></li>
+      <li><b>4</b><h3>اختبر نفسك</h3><p>اجتز الاختبار النهائي واحصل على شهادة إتمام بعد كل دورة.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec band">
+  <div class="wrap">
+    <div class="sec-head"><h2>ما تجده داخل المنصة</h2></div>
+    <div class="feats">
+      <div><h3>حصص مباشرة وتسجيلات</h3><p>اسأل المدرّس أثناء الحصة، وارجع إلى التسجيل قبل الامتحان بأي سرعة تناسبك.</p></div>
+      <div><h3>اختبارات وتصحيح فوري</h3><p>أسئلة بعد كل درس، وبنك أسئلة لكل دورة، ونتيجة تظهر مع شرح الإجابة.</p></div>
+      <div><h3>متابعة ولي الأمر</h3><p>تقرير أسبوعي بالحضور والدرجات للطلاب في المراحل المدرسية.</p></div>
+      <div><h3>منهجان في مكان واحد</h3><p>دورات المنهج المصري والمنهج السعودي لكل صف، كل منها بمدرّسيه.</p></div>
+      <div><h3>يعمل على الموبايل</h3><p>تصفح الدروس وحل الاختبارات من الهاتف دون أن تفقد مكانك عند الانتقال بين الأجهزة.</p></div>
+      <div><h3>دعم يرد عليك</h3><p>فريق دعم للأسئلة التقنية والاشتراكات، وأسئلة المادة تذهب مباشرة إلى المدرّس.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head"><h2>من يشرح لك</h2><p>مدرّسون متخصصون، كل واحد في مادته.</p></div>
+    <div class="team">
+      <div class="person"><i>م</i><div><b>أ. محمود عبد الفتاح</b><span>الرياضيات، الثانوية العامة</span></div></div>
+      <div class="person"><i>ه</i><div><b>أ. هبة سلامة</b><span>الفيزياء، المرحلة الثانوية</span></div></div>
+      <div class="person"><i>م</i><div><b>د. منى فؤاد</b><span>التمريض الإكلينيكي</span></div></div>
+      <div class="person"><i>ف</i><div><b>أ. فهد العتيبي</b><span>العلوم والتحصيلي</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec band" id="plans">
+  <div class="wrap">
+    <div class="sec-head"><h2>الأسعار</h2><p>ابدأ مجانًا، وانتقل إلى اشتراك كامل حين تحتاج.</p></div>
+    <div class="plans">
+      <div class="plan">
+        <h3>مجانية</h3>
+        <div class="big">0 <small>ج.م</small></div>
+        <ul><li>الدورات المجانية المفتوحة</li><li>اختبار تحديد المستوى</li><li>ملخصات الدروس الأولى</li></ul>
+        <button class="btn ghost" data-plan="المجانية">ابدأ مجانًا</button>
+      </div>
+      <div class="plan pick">
+        <h3>شهري <span class="tag">الأكثر اختيارًا</span></h3>
+        <div class="big">299 <small>ج.م / شهر</small></div>
+        <ul><li>كل الدورات في كل الأقسام</li><li>الحصص المباشرة والتسجيلات</li><li>اختبارات وشهادات إتمام</li></ul>
+        <button class="btn" data-plan="الشهرية">اشترك شهريًا</button>
+      </div>
+      <div class="plan">
+        <h3>سنوي</h3>
+        <div class="big">2,499 <small>ج.م / سنة</small></div>
+        <ul><li>كل مزايا الاشتراك الشهري</li><li>متابعة ولي الأمر</li><li>أولوية في الدعم</li></ul>
+        <button class="btn ghost" data-plan="السنوية">اشترك سنويًا</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="faq">
+  <div class="wrap">
+    <div class="sec-head"><h2>أسئلة شائعة</h2></div>
+    <div class="faq">
+      <details><summary>هل تتوفر دورات المنهج المصري والسعودي؟</summary><p>نعم. تجد لكل صف دراسي دورات بحسب المنهج، ويمكنك التبديل بين المنهجين من صفحة القسم.</p></details>
+      <details><summary>كيف أحضر الحصة المباشرة؟</summary><p>تدخل من صفحة الدورة قبل الموعد بدقائق. إذا فاتتك الحصة تجد تسجيلها في الدورة نفسها بعد انتهائها.</p></details>
+      <details><summary>هل أحصل على شهادة؟</summary><p>تحصل على شهادة إتمام بعد إنهاء دروس الدورة واجتياز اختبارها النهائي. هي شهادة من المنصة وليست شهادة جامعية.</p></details>
+      <details><summary>ما طرق الدفع؟</summary><p>بطاقات فيزا وماستركارد، ومحافظ الهاتف المحمول، وفوري. تُعرض لك الخيارات المتاحة عند إتمام الاشتراك.</p></details>
+      <details><summary>هل أستطيع إلغاء الاشتراك؟</summary><p>نعم، في أي وقت من صفحة حسابك، ويستمر وصولك حتى نهاية المدة المدفوعة.</p></details>
+      <details><summary>هل أستطيع استرداد المبلغ؟</summary><p>نعم، خلال 7 أيام من الشراء وفق الشروط الموضحة في <a href="#refund-policy">سياسة الاسترجاع والإلغاء</a>.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="sec band" id="contact">
+  <div class="wrap">
+    <div class="sec-head"><h2>تواصل معنا</h2><p>مقر المنصة في مدينة الإسكندرية، مصر.</p></div>
+    <div class="feats">
+      <div><h3>المقر</h3><p>الإسكندرية، جمهورية مصر العربية</p></div>
+      <div><h3>البريد الإلكتروني</h3><p><span class="mail">mohameda3bdo@gmail.com</span></p></div>
+      <div><h3>ساعات الدعم</h3><p>من الأحد إلى الخميس، من 10 صباحًا إلى 8 مساءً بتوقيت القاهرة</p></div>
+      <div><h3>السياسات</h3><p><a href="#refund-policy" style="color:var(--link)">سياسة الاسترجاع والإلغاء</a><br><a href="#privacy-policy" style="color:var(--link)">سياسة الخصوصية</a></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec cta">
+  <div class="wrap">
+    <div>
+      <h2>ابدأ بدرس مجاني اليوم</h2>
+      <p>أنشئ حسابك، حدّد مستواك، وابدأ أول دورة دون بطاقة دفع.</p>
+    </div>
+    <button class="btn" id="startFree">ابدأ مجانًا</button>
+  </div>
+</section>
+</div>
+
+<div id="docView" hidden>
+<section class="sec">
+  <div class="wrap">
+
+    <article class="doc" id="docRefund" hidden>
+      <a class="back" href="#top">← العودة للرئيسية</a>
+      <h1>سياسة الاسترجاع والإلغاء</h1>
+      <p class="upd">آخر تحديث: 6 نوفمبر 2026</p>
+      <p>نريدك أن تشترك وأنت مطمئن. توضح هذه الصفحة متى يمكنك استرداد المبلغ وكيف تطلب ذلك. تسري السياسة على الدورات والاشتراكات التي تُشترى من منصة إتقان.</p>
+
+      <h2>مدة الاسترجاع</h2>
+      <p>يحق لك طلب استرداد كامل المبلغ خلال 7 أيام من تاريخ الشراء، بشرط ألا تكون قد شاهدت أكثر من 20% من دروس الدورة، ولم تحمّل شهادة الإتمام.</p>
+
+      <h2>الاشتراك الشهري</h2>
+      <p>يمكنك إيقاف التجديد في أي وقت من صفحة حسابك. يستمر وصولك حتى نهاية الشهر المدفوع، ولا يُرد مبلغ عن المدة المنقضية.</p>
+
+      <h2>الاشتراك السنوي</h2>
+      <p>يسري عليه الاسترداد الكامل خلال 7 أيام بالشرط نفسه. بعد ذلك لا يُسترد المبلغ، ويستمر وصولك حتى نهاية السنة، ويمكنك إيقاف التجديد التلقائي متى شئت.</p>
+
+      <h2>الحصص المباشرة</h2>
+      <p>إذا ألغينا حصة مباشرة أو لم تُقدَّم في موعدها، نوفر لك تسجيلها أو حصة بديلة. وإذا تعذر ذلك يحق لك استرداد قيمة الحصة.</p>
+
+      <h2>الدورات المجانية</h2>
+      <p>لا تترتب عليها رسوم، وبالتالي لا يوجد استرداد.</p>
+
+      <h2>حالات لا يشملها الاسترداد</h2>
+      <ul>
+        <li>انتهاء مدة الاسترجاع المذكورة أعلاه.</li>
+        <li>مشاركة بيانات الحساب مع الغير.</li>
+        <li>نسخ المحتوى أو إعادة بيعه أو نشره.</li>
+        <li>مخالفة شروط الاستخدام.</li>
+      </ul>
+
+      <h2>كيف تطلب الاسترداد</h2>
+      <p>أرسل إلى <span class="mail">mohameda3bdo@gmail.com</span> اسمك والبريد المسجّل في حسابك ورقم الطلب واسم الدورة. نرد خلال 3 أيام عمل. إذا قُبل الطلب يُرد المبلغ إلى وسيلة الدفع نفسها خلال 14 يوم عمل، وقد تختلف المدة بحسب البنك أو مزود الدفع.</p>
+
+      <h2>حقوقك القانونية</h2>
+      <p>لا تقلل هذه السياسة من حقوقك بموجب قانون حماية المستهلك المصري رقم 181 لسنة 2018.</p>
+    </article>
+
+    <article class="doc" id="docPrivacy" hidden>
+      <a class="back" href="#top">← العودة للرئيسية</a>
+      <h1>سياسة الخصوصية</h1>
+      <p class="upd">آخر تحديث: 6 نوفمبر 2026</p>
+      <p>تشرح هذه الصفحة ما نجمعه من بياناتك على منصة إتقان، ولماذا نجمعه، وكيف نحميه. تدير المنصة جهة مقرها الإسكندرية، جمهورية مصر العربية.</p>
+
+      <h2>البيانات التي نجمعها</h2>
+      <ul>
+        <li>بيانات الحساب: الاسم والبريد الإلكتروني ورقم الهاتف والمرحلة الدراسية أو التخصص.</li>
+        <li>بيانات التعلم: الدورات المسجلة والتقدم في الدروس ونتائج الاختبارات.</li>
+        <li>بيانات الدفع: تُعالج عبر مزود دفع مرخّص، ولا نخزّن أرقام بطاقاتك على خوادمنا.</li>
+        <li>بيانات الاستخدام: نوع الجهاز والمتصفح وصفحات الموقع التي تزورها.</li>
+      </ul>
+
+      <h2>كيف نستخدمها</h2>
+      <ul>
+        <li>تشغيل حسابك وتقديم الدورات والحصص المباشرة.</li>
+        <li>إرسال إشعارات الحصص والاختبارات والفواتير.</li>
+        <li>تحسين المنصة واقتراح الدورات المناسبة لمستواك.</li>
+        <li>الرد على استفساراتك والتعامل مع طلبات الاسترداد.</li>
+      </ul>
+
+      <h2>مشاركة البيانات</h2>
+      <p>لا نبيع بياناتك. نشاركها فقط مع مزودي الخدمات الذين يشغّلون المنصة لصالحنا، مثل الدفع والاستضافة والبريد، وبالقدر اللازم لأداء الخدمة. وقد نفصح عنها إذا طلبت جهة قانونية مختصة ذلك.</p>
+
+      <h2>الطلاب دون 18 سنة</h2>
+      <p>يحتاج الطالب دون 18 سنة إلى موافقة ولي أمره لإنشاء حساب. يستطيع ولي الأمر الاطلاع على تقرير الحضور والدرجات، وطلب حذف الحساب في أي وقت.</p>
+
+      <h2>مدة الاحتفاظ بالبيانات</h2>
+      <p>نحتفظ ببياناتك ما دام حسابك نشطًا، ثم لمدة محدودة بعد إغلاقه بحسب ما تقتضيه المحاسبة والالتزامات القانونية. بعدها نحذفها أو نجعلها مجهولة الهوية.</p>
+
+      <h2>حقوقك</h2>
+      <p>يحق لك الاطلاع على بياناتك وتصحيحها وطلب حذفها وسحب موافقتك على معالجتها، وفق قانون حماية البيانات الشخصية المصري رقم 151 لسنة 2020. أرسل طلبك إلى <span class="mail">mohameda3bdo@gmail.com</span> ونرد عليك خلال مدة معقولة.</p>
+
+      <h2>الأمان</h2>
+      <p>نحمي بياناتك بتشفير الاتصال وتقييد من يصل إليها داخل الفريق. ومع ذلك لا يوجد نظام آمن بنسبة كاملة، ولذلك ننصحك باختيار كلمة مرور قوية وعدم مشاركتها.</p>
+
+      <h2>ملفات تعريف الارتباط</h2>
+      <p>نستخدمها لتذكّر تسجيل دخولك وتفضيلاتك ولفهم كيف يُستخدم الموقع. يمكنك حذفها أو منعها من إعدادات متصفحك، وقد تتأثر بعض الميزات عند ذلك.</p>
+
+      <h2>تغيير هذه السياسة</h2>
+      <p>إذا غيّرنا السياسة نحدّث التاريخ أعلاه، وننبّهك بالبريد عند أي تغيير جوهري.</p>
+    </article>
+
+  </div>
+</section>
+</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <a class="logo" href="#top"><i>إ</i><span>إتقان</span></a>
+      <p style="color:var(--muted);margin-top:10px;max-width:38ch;font-size:15px">منصة تعليم أونلاين تجمع المراحل الدراسية والجامعة والمهارات والاختبارات المهنية.</p>
+    </div>
+    <div><h3>المنصة</h3><ul><li><a href="#sections">الأقسام</a></li><li><a href="#courses">الدورات</a></li><li><a href="#plans">الأسعار</a></li></ul></div>
+    <div><h3>تواصل وسياسات</h3><ul><li>الإسكندرية، مصر</li><li><span class="mail">mohameda3bdo@gmail.com</span></li><li><a href="#refund-policy">سياسة الاسترجاع والإلغاء</a></li><li><a href="#privacy-policy">سياسة الخصوصية</a></li></ul></div>
+    <p class="note">© 2026 منصة إتقان، الإسكندرية، مصر. الدورات والأسعار وأسماء المدرّسين الظاهرة في هذه الصفحة بيانات تجريبية لعرض التصميم.</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"><span></span></div>
+</div>
+
+<script>
+document.documentElement.setAttribute('dir','rtl');
+document.documentElement.setAttribute('lang','ar');
+
+const CATS=[
+ {id:'school',n:'المراحل الدراسية',s:'ابتدائي · إعدادي · ثانوي، بالمنهجين المصري والسعودي'},
+ {id:'univ',n:'الجامعة والتخصصات',s:'طب · هندسة · تجارة · حاسبات'},
+ {id:'health',n:'الصحة والتمريض',s:'تمريض · جودة الرعاية · إسعافات أولية'},
+ {id:'lang',n:'اللغات',s:'إنجليزي · ألماني · العربية لغير الناطقين'},
+ {id:'tech',n:'البرمجة والتقنية',s:'مواقع · بايثون · بيانات · أمن المعلومات'},
+ {id:'biz',n:'الأعمال والإدارة',s:'مشاريع · تسويق · متاجر إلكترونية'},
+ {id:'exams',n:'الاختبارات والرخص',s:'قدرات · تحصيلي · IELTS · الهيئة السعودية للتخصصات الصحية'},
+ {id:'design',n:'التصميم والإبداع',s:'جرافيك · مونتاج · تصوير'},
+ {id:'soft',n:'تطوير الذات',s:'تواصل · إدارة الوقت · العمل الحر'},
+ {id:'quran',n:'القرآن والعلوم الشرعية',s:'تجويد · حفظ · فقه ميسّر'},
+ {id:'kids',n:'الأطفال',s:'قراءة · حساب ذهني · علوم مبسطة'},
+ {id:'teach',n:'تدريب المعلمين',s:'طرق تدريس · اختبارات إلكترونية · إدارة الصف'}
+];
+// cat, title, teacher, level, hours, lessons, price, live
+const RAW=[
+ ['school','الرياضيات للصف الثالث الثانوي (المنهج المصري)','أ. محمود عبد الفتاح','متوسط',64,120,149,1],
+ ['school','الفيزياء للصف الثاني الثانوي','أ. هبة سلامة','متوسط',48,90,129,1],
+ ['school','العلوم للصف الثالث المتوسط (المنهج السعودي)','أ. فهد العتيبي','متوسط',36,70,99,1],
+ ['school','اللغة العربية للمرحلة الابتدائية','أ. نجلاء رضوان','مبتدئ',30,64,79,0],
+ ['univ','تشريح الجهاز العصبي لطلاب الطب','د. ياسر منصور','متقدم',28,45,189,0],
+ ['univ','الستاتيكا في الهندسة الميكانيكية','م. أحمد زكي','متوسط',40,62,139,1],
+ ['univ','المحاسبة المالية 1','د. سمر الشريف','مبتدئ',32,54,119,0],
+ ['health','أساسيات التمريض الإكلينيكي','د. منى فؤاد','مبتدئ',44,80,159,1],
+ ['health','الجودة وسلامة المرضى في المنشآت الصحية','أ. خالد الحربي','متوسط',24,38,169,0],
+ ['health','الإسعافات الأولية والإنعاش القلبي الرئوي','د. هالة بدر','مبتدئ',6,12,0,0],
+ ['lang','الإنجليزية للمحادثة من الصفر','أ. ريم الغامدي','مبتدئ',40,76,99,1],
+ ['lang','الألمانية: المستوى A1','أ. كريم النجار','مبتدئ',52,88,149,1],
+ ['lang','العربية لغير الناطقين بها','أ. إيمان السيد','مبتدئ',36,60,119,0],
+ ['tech','تطوير المواقع بـ HTML وCSS وJavaScript','م. طارق فهمي','مبتدئ',58,110,179,0],
+ ['tech','بايثون للمبتدئين','م. لجين الدوسري','مبتدئ',34,70,129,1],
+ ['tech','تحليل البيانات بـ Excel وPower BI','أ. وليد سعيد','متوسط',30,52,149,0],
+ ['tech','أساسيات الأمن السيبراني','م. سلمان القحطاني','متوسط',26,44,169,0],
+ ['biz','أساسيات إدارة المشاريع','أ. دينا عبد الرحمن','متوسط',22,36,139,0],
+ ['biz','التسويق الرقمي وإعلانات التواصل الاجتماعي','أ. محمد الجمال','متوسط',28,48,129,1],
+ ['biz','إنشاء متجر إلكتروني والبيع أونلاين','م. عبير المطيري','مبتدئ',20,34,99,0],
+ ['exams','القدرات العامة: الكمي واللفظي','أ. سعد الشمري','متوسط',38,72,119,1],
+ ['exams','التحصيلي العلمي','أ. فهد العتيبي','متقدم',46,84,139,1],
+ ['exams','IELTS Academic','أ. ريم الغامدي','متقدم',42,66,189,1],
+ ['exams','التجهيز لاختبار الهيئة السعودية للتخصصات الصحية','د. منى فؤاد','متقدم',36,58,199,0],
+ ['design','التصميم الجرافيكي بـ Photoshop','أ. نورا حسام','مبتدئ',32,58,129,0],
+ ['design','المونتاج وصناعة الفيديو','أ. زياد عادل','متوسط',30,50,139,0],
+ ['soft','مهارات التواصل والإقناع','أ. لمى الزهراني','مبتدئ',14,24,89,0],
+ ['soft','إدارة الوقت والإنتاجية','أ. ماجد الرشيد','مبتدئ',5,10,0,0],
+ ['quran','التجويد للمبتدئين','أ. عمر الشناوي','مبتدئ',24,40,69,1],
+ ['quran','فقه الصلاة والطهارة ميسّرًا','د. عبد الله الشهري','مبتدئ',12,20,0,0],
+ ['kids','الحساب الذهني للأطفال (6 إلى 10 سنوات)','أ. شيماء نبيل','مبتدئ',20,40,89,1],
+ ['kids','القراءة والكتابة للصف الأول','أ. هدى المنصور','مبتدئ',26,52,79,0],
+ ['teach','استراتيجيات التدريس النشط','د. فاطمة العمري','متوسط',16,24,129,0],
+ ['teach','صناعة الاختبارات الإلكترونية','أ. بسام الحداد','مبتدئ',10,18,99,0]
+];
+const COURSES=RAW.map((r,i)=>({id:i,cat:r[0],title:r[1],teacher:r[2],level:r[3],hours:r[4],lessons:r[5],price:r[6],live:!!r[7]}));
+const catName=id=>(CATS.find(c=>c.id===id)||{}).n||'';
+const state={cat:'all',q:'',level:'all'};
+const enrolled=new Set();
+const $=id=>document.getElementById(id);
+const egp=p=>(Math.round(p*5/10)*10).toLocaleString('en')+' ج.م';
+
+function toast(msg){
+  const t=$('toast');t.querySelector('span').textContent=msg;t.classList.add('on');
+  clearTimeout(toast._t);toast._t=setTimeout(()=>t.classList.remove('on'),2600);
+}
+function visible(){
+  const q=state.q.trim().toLowerCase();
+  return COURSES.filter(c=>
+    (state.cat==='all'||c.cat===state.cat)&&
+    (state.level==='all'||c.level===state.level)&&
+    (!q||(c.title+' '+c.teacher+' '+catName(c.cat)).toLowerCase().includes(q)));
+}
+function renderChips(){
+  $('chips').innerHTML=[{id:'all',n:'الكل'}].concat(CATS).map(c=>
+    `<button class="chip" type="button" data-cat="${c.id}" aria-pressed="${state.cat===c.id}">${c.n}</button>`).join('');
+}
+function renderGrid(){
+  const list=visible();
+  $('count').textContent=`عرض ${list.length} من ${COURSES.length} دورة`;
+  $('grid').innerHTML=list.length?list.map(c=>{
+    const on=enrolled.has(c.id);
+    return `<article class="course">
+      <div class="c-top"><span class="tag">${catName(c.cat)}</span>${c.live?'<span class="live">حصص مباشرة</span>':''}</div>
+      <h3>${c.title}</h3>
+      <p class="teacher">${c.teacher}</p>
+      <p class="meta">${c.level} · ${c.hours} ساعة · ${c.lessons} درسًا</p>
+      <div class="c-foot"><span class="price">${c.price?egp(c.price):'مجاني'}</span>
+        <button class="btn sm ${on?'done':''}" type="button" data-enroll="${c.id}">${on?'تم التسجيل':'سجّل'}</button></div>
+    </article>`}).join(''):'<div class="empty">لا توجد دورات مطابقة. جرّب كلمة أخرى أو اختر «الكل».</div>';
+}
+function renderTiles(){
+  $('tiles').innerHTML=CATS.map(c=>{
+    const n=COURSES.filter(x=>x.cat===c.id).length;
+    return `<button class="tile" type="button" data-cat="${c.id}"><h3>${c.n}</h3><p class="sub">${c.s}</p><span class="cnt num">${n} دورات</span></button>`}).join('');
+}
+function renderAll(){renderChips();renderGrid();}
+function go(){ $('courses').scrollIntoView(); }
+
+function init(){
+  $('hc').innerHTML='<option value="all">كل الأقسام</option>'+CATS.map(c=>`<option value="${c.id}">${c.n}</option>`).join('');
+  $('fCourses').textContent=COURSES.length;
+  $('fCats').textContent=CATS.length;
+  $('fLive').textContent=COURSES.filter(c=>c.live).length;
+  renderTiles();renderAll();
+}
+document.addEventListener('click',e=>{
+  const cat=e.target.closest('[data-cat]');
+  if(cat){state.cat=cat.dataset.cat;renderAll();if(cat.classList.contains('tile'))go();return;}
+  const en=e.target.closest('[data-enroll]');
+  if(en){
+    const id=+en.dataset.enroll;
+    if(enrolled.has(id)){enrolled.delete(id);toast('أُلغي تسجيلك في الدورة');}
+    else{enrolled.add(id);toast('تم تسجيلك في: '+COURSES[id].title);}
+    $('mineN').textContent=enrolled.size;renderGrid();return;
+  }
+  const pl=e.target.closest('[data-plan]');
+  if(pl){toast('اخترت الباقة '+pl.dataset.plan+'. يتصل هذا الزر بصفحة الدفع عند ربط الموقع.');}
+});
+$('q').addEventListener('input',e=>{state.q=e.target.value;renderGrid();});
+$('lvl').addEventListener('change',e=>{state.level=e.target.value;renderGrid();});
+$('heroSearch').addEventListener('submit',e=>{
+  e.preventDefault();
+  state.q=$('hq').value;state.cat=$('hc').value;
+  $('q').value=state.q;renderAll();go();
+});
+$('startFree').addEventListener('click',()=>{
+  state.cat='all';state.q='';state.level='all';$('q').value='';$('lvl').value='all';
+  const free=COURSES.find(c=>c.price===0);
+  enrolled.add(free.id);$('mineN').textContent=enrolled.size;renderAll();
+  toast('تم تسجيلك في أول دورة مجانية: '+free.title);
+});
+const DOCS={'refund-policy':'docRefund','privacy-policy':'docPrivacy'};
+function route(){
+  const h=decodeURIComponent(location.hash.slice(1));
+  const isDoc=Object.prototype.hasOwnProperty.call(DOCS,h);
+  $('homeView').hidden=isDoc;
+  $('docView').hidden=!isDoc;
+  document.querySelectorAll('.doc').forEach(d=>{d.hidden=!(isDoc&&d.id===DOCS[h]);});
+  if(isDoc){window.scrollTo(0,0);return;}
+  const el=h&&$(h);
+  if(el)el.scrollIntoView();else window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);
+init();
+route();
+</script>
+
+</body></html>
