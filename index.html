@@ -609,6 +609,8 @@ var PLANS={
 };
 var catName={};CATS.forEach(function(c){catName[c.id]=c.name});
 
+// رابط السيرفر على Vercel (بدون / في الآخر). اتركه فارغًا لو الموقع نفسه مستضاف على Vercel.
+var API_BASE='https://itqan-itqan-b9f7.vercel.app';
 var state={cat:'all',plan:'الشهرية'};
 var mine=[];
 try{mine=JSON.parse(localStorage.getItem('itqan_mine')||'[]')}catch(e){}
@@ -685,14 +687,30 @@ function renderCheckout(){
 }
 $('#coForm').addEventListener('submit',function(e){
  e.preventDefault();
- var p=PLANS[state.plan];
- var order={plan:state.plan,amount:p.price,currency:'EGP',name:$('#coName').value.trim(),email:$('#coEmail').value.trim(),phone:$('#coPhone').value.trim(),method:(document.querySelector('input[name=pay]:checked')||{}).value};
- // TODO: أرسل order إلى الخادم ثم حوّل العميل إلى صفحة بوابة الدفع (Paymob / Fawry / ...).
- // لا تجمع أرقام البطاقات في هذه الصفحة أبدًا؛ تُدخل في صفحة البوابة فقط.
- var m=$('#coMsg');
- m.textContent='هذه نسخة تجريبية: لم تُربط بوابة الدفع بعد، ولم يتم خصم أي مبلغ ولم يُحفظ أي طلب.';
- m.hidden=false;
+ var btn=$('#coSubmit'),m=$('#coMsg');
+ var order={plan:state.plan,name:$('#coName').value.trim(),email:$('#coEmail').value.trim(),phone:$('#coPhone').value.trim(),method:(document.querySelector('input[name=pay]:checked')||{}).value};
+ var label=btn.textContent;
+ btn.disabled=true;btn.textContent='جارٍ تحويلك لصفحة الدفع...';m.hidden=true;
+ fetch(API_BASE+'/api/create-payment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(order)})
+  .then(function(r){return r.json().then(function(d){return{ok:r.ok,d:d}})})
+  .then(function(x){
+   if(x.ok&&x.d.url){window.location.href=x.d.url;return}
+   throw new Error(x.d&&x.d.error||'تعذر بدء الدفع')
+  })
+  .catch(function(err){
+   m.textContent=(err&&err.message)||'تعذر بدء الدفع، حاول مرة أخرى.';m.hidden=false;
+   btn.disabled=false;btn.textContent=label;
+  });
 });
+
+/* ---------- العودة من بوابة الدفع ---------- */
+(function(){
+ var q=new URLSearchParams(location.search);
+ if(!q.has('success'))return;
+ var ok=q.get('success')==='true'&&q.get('pending')!=='true';
+ setTimeout(function(){toast(ok?'تم استلام الدفع، سيصلك تأكيد على بريدك قريبًا':'لم تتم عملية الدفع، لم يُخصم أي مبلغ')},300);
+ history.replaceState(null,'',location.pathname+location.hash);
+})();
 
 /* ---------- التنقل بين الصفحات ---------- */
 var DOCS={'terms':'docTerms','refund-policy':'docRefund','privacy-policy':'docPrivacy','shipping-policy':'docShipping','about':'docAbout','checkout':'docCheckout'};
