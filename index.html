@@ -674,7 +674,9 @@ $('#grid').addEventListener('click',function(e){
 });
 
 /* ---------- الباقات والدفع ---------- */
-function openCheckout(plan){state.plan=PLANS[plan]?plan:'الشهرية';if(location.hash==='#checkout')renderCheckout();else location.hash='#checkout'}
+// الدفع يتم في صفحة الدفع على الخادم (Vercel) بنفس الاسم والتصميم
+var PAY_URL='https://itqan-itqan-b9f7.vercel.app/pay.html';
+function openCheckout(plan){var pl=PLANS[plan]?plan:'الشهرية';window.location.href=PAY_URL+'?plan='+encodeURIComponent(pl)}
 $$('[data-plan]').forEach(function(b){b.addEventListener('click',function(){openCheckout(b.dataset.plan)})});
 $('#startFree').addEventListener('click',function(){openCheckout('الشهرية')});
 
@@ -687,25 +689,25 @@ function renderCheckout(){
 }
 $('#coForm').addEventListener('submit',function(e){
  e.preventDefault();
- var btn=$('#coSubmit'),m=$('#coMsg');
- var order={plan:state.plan,name:$('#coName').value.trim(),email:$('#coEmail').value.trim(),phone:$('#coPhone').value.trim(),method:(document.querySelector('input[name=pay]:checked')||{}).value};
- var label=btn.textContent;
- btn.disabled=true;btn.textContent='جارٍ تحويلك لصفحة الدفع...';m.hidden=true;
- fetch(API_BASE+'/api/create-payment',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(order)})
-  .then(function(r){return r.json().then(function(d){return{ok:r.ok,d:d}})})
-  .then(function(x){
-   if(x.ok&&x.d.url){window.location.href=x.d.url;return}
-   throw new Error(x.d&&x.d.error||'تعذر بدء الدفع')
-  })
-  .catch(function(err){
-   m.textContent=(err&&err.message)||'تعذر بدء الدفع، حاول مرة أخرى.';m.hidden=false;
-   btn.disabled=false;btn.textContent=label;
-  });
+ var btn=$('#coSubmit');
+ var order={plan:state.plan,name:$('#coName').value.trim(),email:$('#coEmail').value.trim(),phone:$('#coPhone').value.trim(),method:(document.querySelector('input[name=pay]:checked')||{}).value,back:location.origin+location.pathname};
+ btn.disabled=true;btn.textContent='جارٍ تحويلك لصفحة الدفع...';
+ // نموذج عادي يفتح السيرفر مباشرة (لا يحتاج CORS)، والسيرفر يحوّلك لصفحة Paymob
+ var f=document.createElement('form');
+ f.method='POST';f.action=API_BASE+'/api/create-payment';f.style.display='none';
+ Object.keys(order).forEach(function(k){var i=document.createElement('input');i.type='hidden';i.name=k;i.value=order[k]||'';f.appendChild(i)});
+ document.body.appendChild(f);f.submit();
 });
 
 /* ---------- العودة من بوابة الدفع ---------- */
 (function(){
  var q=new URLSearchParams(location.search);
+ if(q.has('pay_error')){
+  var msg=q.get('pay_error');
+  history.replaceState(null,'',location.pathname+location.hash);
+  setTimeout(function(){var m=$('#coMsg');if(m){m.textContent=msg;m.hidden=false}},300);
+  return;
+ }
  if(!q.has('success'))return;
  var ok=q.get('success')==='true'&&q.get('pending')!=='true';
  setTimeout(function(){toast(ok?'تم استلام الدفع، سيصلك تأكيد على بريدك قريبًا':'لم تتم عملية الدفع، لم يُخصم أي مبلغ')},300);
