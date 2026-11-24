@@ -19,7 +19,8 @@ function integrationId(method) {
 
 function cors(req, res) {
   // الصفحات المسموح لها بالاتصال بهذا السيرفر
-  const allowed = (process.env.ALLOWED_ORIGINS || '').split(',').map((s) => s.trim()).filter(Boolean);
+  const allowed = ['https://mohameda3bdo-dev.github.io']
+    .concat((process.env.ALLOWED_ORIGINS || '').split(',').map((s) => s.trim().replace(/\/$/, '')).filter(Boolean));
   const origin = req.headers.origin;
   if (origin && allowed.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
